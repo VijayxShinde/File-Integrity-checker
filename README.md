@@ -18,7 +18,7 @@ Clone this repository to your local machine:
 git clone https://github.com/VijayxShinde/File-Integrity-checker
 
 Requirements:
-Python 3.x
+Python 3.X
 No external dependencies beyond Python’s built-in libraries.
 
 Usage:
