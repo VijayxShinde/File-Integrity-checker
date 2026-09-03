@@ -1,0 +1,40 @@
+name: Auto Commit
+
+on:
+  schedule:
+    # Runs at 11:30 PM UTC every day
+    - cron: '30 23 * * *'
+  workflow_dispatch:
+
+jobs:
+  auto_commit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Update the log file
+        run: |
+          echo "Automated commit on $(date)" >> commit_log.txt
+
+      - name: Commit and Push Changes
+        run: |
+          git config --local user.email "vijayxshinde@gmail.com"
+          git config --local user.name "VijayxShinde"
+          git add commit_log.txt
+          
+          # Generate a random time between 09:00 and 20:59
+          RANDOM_HOUR=$((9 + RANDOM % 12))
+          RANDOM_MINUTE=$((RANDOM % 60))
+          RANDOM_SECOND=$((RANDOM % 60))
+          
+          # Format the time as HH:MM:SS
+          RAND_TIME=$(printf "%02d:%02d:%02d" $RANDOM_HOUR $RANDOM_MINUTE $RANDOM_SECOND)
+          
+          # Get today's date with the randomized time
+          COMMIT_DATE=$(date -d "$RAND_TIME" -Iseconds)
+          
+          # Apply the fake date to the commit
+          GIT_AUTHOR_DATE=$COMMIT_DATE GIT_COMMITTER_DATE=$COMMIT_DATE git commit -m "Auto-update commit graph"
+          
+          git push
